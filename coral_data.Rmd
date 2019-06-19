@@ -1,0 +1,26 @@
+---
+title: "tidy_coral_analysis"
+author: "Tatiana"
+date: "June 19, 2019"
+output: pdf_document
+---
+
+Libraries
+```{r libraries}
+library(tidyverse)
+library(janitor) # install.packages('janitor')
+library(skimr) # install.packages('skimr')
+library(stringr) # added when we needed it for benthic data
+```
+
+Load data
+```{r}
+## benthic data
+benthic_url <- 'https://www.nodc.noaa.gov/archive/arc0054/0104255/1.1/data/0-data/cd08/100308OaAla03m.CSV'
+```
+
+```{r}
+## buoy data
+buoy_url <- 'http://www.ndbc.noaa.gov/view_text_file.php?filename=mokh1h2010.txt.gz&dir=data/historical/stdmet/'
+```
+
