@@ -6,7 +6,7 @@ output: pdf_document
 ---
 
 Libraries
-```{r libraries}
+```{r libraries, warning=F, message=F}
 library(tidyverse)
 library(janitor) # install.packages('janitor')
 library(skimr) # install.packages('skimr')
@@ -14,13 +14,67 @@ library(stringr) # added when we needed it for benthic data
 ```
 
 Load data
-```{r}
+```{r  setup}
 ## benthic data
 benthic_url <- 'https://www.nodc.noaa.gov/archive/arc0054/0104255/1.1/data/0-data/cd08/100308OaAla03m.CSV'
-```
 
-```{r}
 ## buoy data
 buoy_url <- 'http://www.ndbc.noaa.gov/view_text_file.php?filename=mokh1h2010.txt.gz&dir=data/historical/stdmet/'
+```
+
+
+```{r raw data}
+benthic_raw <- read_csv(benthic_url)
+head(benthic_raw) 
+```
+
+clean_names () this function delete the space between names and replace them with "_"
+```{r clean the names}
+## the `janitor` package's `clean_names` function
+benthic <- benthic_raw %>%
+  janitor::clean_names()
+
+names(benthic)
+```
+
+```{r select}
+benthic <- benthic %>% 
+  select(id_name, point, x, y, id_date)
+```
+
+remove the "#"" before the numbers
+```{r more cleaning}
+benthic <- benthic %>% 
+  mutate(date = stringr::str_remove_all(id_date, "#"))
+
+head(benthic)
+```
+
+Explore data. Package skimr has a function to summarise data
+```{r explore data}
+summary(benthic)
+skimr::skim(benthic)
+```
+
+Which species are represented
+```{r}
+unique(benthic$id_name)
+```
+
+plot
+And to get a sense of our data let’s just have a quick plot of species count by date:
+```{r plot}
+ggplot(benthic, aes(date, fill=id_name))+
+  geom_bar()
+```
+
+#Buoy data
+
+```{r buoy data}
+buoy <- readr::read_csv(buoy_url)
+head(buoy) # hmm this doesn't look right! Why not?
+
+buoy_raw <- read_table(buoy_url)
+head(buoy_raw)
 ```
 
