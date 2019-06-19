@@ -1,14 +1,115 @@
 title: "Graphics with ggplot2"
 author: "Julie"
-date: "11/21/2017"
+date: "19-06-19"
 output: html_document
 ---
 
 # Learning ggplot2
 
+load tidyverse
+```{r load_package}
+library(tidyverse)
+```
+
+
 We're learning ggplot2 It's going to be amazing. 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+we extract the link from GitHub "data-science-training/data/OHI_global_data.csv", and then you go to see the "raw data" and paste the link into our read.csv function
+```{r data}
+
+ohi_data <-  read.csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/OHI_global_data.csv")
+
+```
+
+we start
+```{r start_ggplot}
+
+#ggplot only work with data frame
+ggplot(data=ohi_data, aes(x=georegion_one, y=OHI_score))+
+  geom_point()
+
+ggplot(data=ohi_data, aes(x=georegion_one, y=OHI_score))+
+  geom_jitter(width=0.2)
+
+
+```
+
+Boxplot
+```{r boxplot}
+
+ggplot(data=ohi_data, aes(x=georegion_one))+
+  geom_bar()
+
+```
+
+histogram
+```{r histogram}
+ggplot(data=ohi_data, aes(x=OHI_score))+
+  geom_histogram()
+
+```
+
+Multiple geom exploration
+```{r multiple geoms}
+
+ohi_summary <- read.csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/OHI_scores_georegion_summary.csv")
+
+ggplot(data=ohi_summary, aes(x=georegions, y= OHI_score_average))+
+  geom_bar(stat = 'identity', width=0.5)+
+  geom_jitter(data=ohi_data, aes(x=georegion_one, y=OHI_score))
+
+
+```
+
+Adding a third variable with aes
+```{r}
+
+ggplot(data=ohi_data, aes(x=OHI_score, y= HDI, color=coastal_pop))+
+  geom_point()
+```
+
+Adding a third discrete variable
+```{r}
+ggplot(data=ohi_data, aes(x=OHI_score, y= HDI, color=georegion_one))+
+  geom_point()
+
+```
+
+Themes
+```{r}
+ggplot(data=ohi_data, aes(x=OHI_score, y= HDI))+
+  geom_point()+
+  theme_bw()
+
+```
+
+change theme to theme dowload from GitHub
+```{r}
+source('https://raw.githubusercontent.com/OHI-Science/ohiprep/master/src/R/scatterTheme.txt')       
+
+ggplot(data = ohi_data, aes(x = OHI_score, y = HDI)) + 
+  geom_point() + 
+  scatterTheme
+```
+
+Change labels
+```{r}
+       
+ggplot(data = ohi_data, aes(x = OHI_score, y = HDI, color-georegion_one)) + 
+  geom_point() +
+  theme(y="OHI core, 2017",
+        x="human development Index",
+        title="Human development is good",
+        color="Georegions")
+```
+
+Instale package
+```{r}
+install.packages("RcolorBrewer")
+library(RColorBrewer)
+display.brewer.all()
+
+my_palette <- brewer.pal(n=9, "Set3")
+
 ```
 
