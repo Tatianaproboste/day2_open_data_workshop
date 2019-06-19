@@ -1,0 +1,51 @@
+---
+title: "dplyr"
+author: "Tatiana"
+date: "June 19, 2019"
+output: html_document
+---
+
+Loading tidyverse
+```{r}
+library(tidyverse)
+
+```
+
+Load data
+```{r}
+ gapminder <- read.csv('https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv')
+#loading the gapminder dataset from github
+```
+
+
+```{r}
+head(gapminder)
+tail(gapminder)
+
+#str() -  stands for structure
+str(gapminder)
+
+#column names
+names(gapminder)
+ncol(gapminder)
+view(gapminder)
+```
+
+
+filter()
+```{r}
+filter(gapminder, lifeExp <29)
+filter(gapminder, country=="Mexico", year==2002)
+
+
+```
+
+
+What was the average life expectency in Brazil between 1987 and 2007?
+
+```{r}
+brazil<- (filter(gapminder, country=='Brazil', year>1987 & year<2007))
+mean(brazil$lifeExp)
+
+```
+
