@@ -73,8 +73,26 @@ ggplot(benthic, aes(date, fill=id_name))+
 ```{r buoy data}
 buoy <- readr::read_csv(buoy_url)
 head(buoy) # hmm this doesn't look right! Why not?
+#this is not a csv file, it is a text file 
 
 buoy_raw <- read_table(buoy_url)
 head(buoy_raw)
+
+#read_table2 can read files with unconsistency. This is the best way to read this type of file
+buoy_raw <- read_table2(buoy_url)
+head(buoy_raw)
+
+```
+
+#Wrangle!
+```{r}
+buoy <- buoy_raw
+names(buoy)
+head(buoy)
+
+#1. overwrite column name
+names(buoy) <- str_c(names(buoy), #current header
+                buoy %>% filter('#YY' =="#yr"), #row1 -- don't say buoy[1,]
+                sep="_") ## separate by '_'
 ```
 

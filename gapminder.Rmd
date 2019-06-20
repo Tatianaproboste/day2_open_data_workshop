@@ -42,10 +42,80 @@ filter(gapminder, country=="Mexico", year==2002)
 
 
 What was the average life expectency in Brazil between 1987 and 2007?
-
 ```{r}
 brazil<- (filter(gapminder, country=='Brazil', year>1987 & year<2007))
 mean(brazil$lifeExp)
 
 ```
+
+select()
+```{r}
+select(gapminder, year, country, lifeExp) #select what I want
+select(gapminder, -continent, -gdpPercap) # drop what I don't need
+
+```
+
+Using filter() and select()
+```{r}
+gap_cambodia <- filter(gapminder,country=="Cambodia")
+gap_cambodia2 <- select(gap_cambodia, -continent, -lifeExp)
+```
+
+
+%>%
+```{r}
+#short cut : Ctrl + Shift + m
+gapminder %>% head() 
+
+gap_cambodia <- filter(gapminder,country=="Cambodia") %>%  #and then
+ select(-continent, -lifeExp)
+
+```
+
+mutate()
+```{r}
+gapminder %>% 
+  mutate(gdp = pop*gdpPercap) %>% 
+  head()
+
+
+```
+
+
+Calculate the population in thousands for all Asian countries in the year 2007 and add it as a new column.
+```{r}
+gapminder %>% 
+  filter(continent=="Asia", year==2007) %>% 
+  mutate(pop2= pop/1000) %>% 
+  head()
+
+```
+
+group_by()
+```{r}
+gapminder %>% 
+  filter(year==2002) %>% 
+  group_by(continent) %>% 
+  summarize(cont_pop = sum(pop))
+```
+
+arrange()
+```{r}
+gapminder %>% 
+   group_by(continent, year) %>% 
+  summarize(cont_pop = sum(pop)) %>% 
+  arrange(-year)
+
+```
+
+
+What is the maximum GDP per continent across all years?
+```{r}
+gapminder %>% 
+  mutate(gdp = pop*gdpPercap) %>% 
+  group_by(continent) %>% 
+  mutate(maxGDP = max(gdp)) %>% 
+  filter(gdp==maxGDP)
+```
+
 
